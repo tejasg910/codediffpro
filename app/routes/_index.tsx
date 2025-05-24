@@ -1,138 +1,480 @@
-import type { MetaFunction } from "@remix-run/node";
+import { useState } from "react";
+import { Copy, FileText, GitCompare, Moon, Sun, Zap, Check, Play, Code2, Sparkles, ArrowRight, Github, Shield, Cpu } from "lucide-react";
+import * as Diff from "diff";
+import { Theme, useTheme } from "remix-themes";
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
-  ];
-};
-
-export default function Index() {
-  return (
-    <div className="flex h-screen items-center justify-center">
-      <div className="flex flex-col items-center gap-16">
-        <header className="flex flex-col items-center gap-9">
-          <h1 className="leading text-2xl font-bold text-gray-800 dark:text-gray-100">
-            Welcome to <span className="sr-only">Remix</span>
-          </h1>
-          <div className="h-[144px] w-[434px]">
-            <img
-              src="/logo-light.png"
-              alt="Remix"
-              className="block w-full dark:hidden"
-            />
-            <img
-              src="/logo-dark.png"
-              alt="Remix"
-              className="hidden w-full dark:block"
-            />
-          </div>
-        </header>
-        <nav className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-gray-200 p-6 dark:border-gray-700">
-          <p className="leading-6 text-gray-700 dark:text-gray-200">
-            What&apos;s next?
-          </p>
-          <ul>
-            {resources.map(({ href, text, icon }) => (
-              <li key={href}>
-                <a
-                  className="group flex items-center gap-3 self-stretch p-3 leading-normal text-blue-700 hover:underline dark:text-blue-500"
-                  href={href}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {icon}
-                  {text}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
-    </div>
-  );
+const JSCodeCompare = () => {
+  const [originalCode, setOriginalCode] = useState(`function calculateSum(a, b) {
+  return a + b;
 }
 
-const resources = [
-  {
-    href: "https://remix.run/start/quickstart",
-    text: "Quick Start (5 min)",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        className="stroke-gray-600 group-hover:stroke-current dark:stroke-gray-300"
-      >
-        <path
-          d="M8.51851 12.0741L7.92592 18L15.6296 9.7037L11.4815 7.33333L12.0741 2L4.37036 10.2963L8.51851 12.0741Z"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
-  },
-  {
-    href: "https://remix.run/start/tutorial",
-    text: "Tutorial (30 min)",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        className="stroke-gray-600 group-hover:stroke-current dark:stroke-gray-300"
-      >
-        <path
-          d="M4.561 12.749L3.15503 14.1549M3.00811 8.99944H1.01978M3.15503 3.84489L4.561 5.2508M8.3107 1.70923L8.3107 3.69749M13.4655 3.84489L12.0595 5.2508M18.1868 17.0974L16.635 18.6491C16.4636 18.8205 16.1858 18.8205 16.0144 18.6491L13.568 16.2028C13.383 16.0178 13.0784 16.0347 12.915 16.239L11.2697 18.2956C11.047 18.5739 10.6029 18.4847 10.505 18.142L7.85215 8.85711C7.75756 8.52603 8.06365 8.21994 8.39472 8.31453L17.6796 10.9673C18.0223 11.0653 18.1115 11.5094 17.8332 11.7321L15.7766 13.3773C15.5723 13.5408 15.5554 13.8454 15.7404 14.0304L18.1868 16.4767C18.3582 16.6481 18.3582 16.926 18.1868 17.0974Z"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
-  },
-  {
-    href: "https://remix.run/docs",
-    text: "Remix Docs",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        className="stroke-gray-600 group-hover:stroke-current dark:stroke-gray-300"
-      >
-        <path
-          d="M9.99981 10.0751V9.99992M17.4688 17.4688C15.889 19.0485 11.2645 16.9853 7.13958 12.8604C3.01467 8.73546 0.951405 4.11091 2.53116 2.53116C4.11091 0.951405 8.73546 3.01467 12.8604 7.13958C16.9853 11.2645 19.0485 15.889 17.4688 17.4688ZM2.53132 17.4688C0.951566 15.8891 3.01483 11.2645 7.13974 7.13963C11.2647 3.01471 15.8892 0.951453 17.469 2.53121C19.0487 4.11096 16.9854 8.73551 12.8605 12.8604C8.73562 16.9853 4.11107 19.0486 2.53132 17.4688Z"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
-      </svg>
-    ),
-  },
-  {
-    href: "https://rmx.as/discord",
-    text: "Join Discord",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="20"
-        viewBox="0 0 24 20"
-        fill="none"
-        className="stroke-gray-600 group-hover:stroke-current dark:stroke-gray-300"
-      >
-        <path
-          d="M15.0686 1.25995L14.5477 1.17423L14.2913 1.63578C14.1754 1.84439 14.0545 2.08275 13.9422 2.31963C12.6461 2.16488 11.3406 2.16505 10.0445 2.32014C9.92822 2.08178 9.80478 1.84975 9.67412 1.62413L9.41449 1.17584L8.90333 1.25995C7.33547 1.51794 5.80717 1.99419 4.37748 2.66939L4.19 2.75793L4.07461 2.93019C1.23864 7.16437 0.46302 11.3053 0.838165 15.3924L0.868838 15.7266L1.13844 15.9264C2.81818 17.1714 4.68053 18.1233 6.68582 18.719L7.18892 18.8684L7.50166 18.4469C7.96179 17.8268 8.36504 17.1824 8.709 16.4944L8.71099 16.4904C10.8645 17.0471 13.128 17.0485 15.2821 16.4947C15.6261 17.1826 16.0293 17.8269 16.4892 18.4469L16.805 18.8725L17.3116 18.717C19.3056 18.105 21.1876 17.1751 22.8559 15.9238L23.1224 15.724L23.1528 15.3923C23.5873 10.6524 22.3579 6.53306 19.8947 2.90714L19.7759 2.73227L19.5833 2.64518C18.1437 1.99439 16.6386 1.51826 15.0686 1.25995ZM16.6074 10.7755L16.6074 10.7756C16.5934 11.6409 16.0212 12.1444 15.4783 12.1444C14.9297 12.1444 14.3493 11.6173 14.3493 10.7877C14.3493 9.94885 14.9378 9.41192 15.4783 9.41192C16.0471 9.41192 16.6209 9.93851 16.6074 10.7755ZM8.49373 12.1444C7.94513 12.1444 7.36471 11.6173 7.36471 10.7877C7.36471 9.94885 7.95323 9.41192 8.49373 9.41192C9.06038 9.41192 9.63892 9.93712 9.6417 10.7815C9.62517 11.6239 9.05462 12.1444 8.49373 12.1444Z"
-          strokeWidth="1.5"
-        />
-      </svg>
-    ),
-  },
-];
+console.log(calculateSum(5, 3));`);
+
+  const [modifiedCode, setModifiedCode] = useState(`function calculateSum(a, b, c = 0) {
+  const result = a + b + c;
+  return result;
+}
+
+console.log(calculateSum(5, 3, 2));`);
+  const [theme, setTheme] = useTheme()
+  console.log(theme, "This is theme")
+  interface DiffResultType {
+    leftLines: Array<{ type: 'removed' | 'placeholder' | 'unchanged'; content?: string; lineNum?: number }>;
+    rightLines: Array<{ type: 'added' | 'placeholder' | 'unchanged'; content?: string; lineNum?: number }>;
+  }
+
+  const [diffResult, setDiffResult] = useState<DiffResultType | null>(null);
+  const [isComparing, setIsComparing] = useState(false);
+  const [copied, setCopied] = useState({ original: false, modified: false });
+
+  const compareCodes = async () => {
+    setIsComparing(true);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    const diff = Diff.diffLines(originalCode, modifiedCode);
+    const leftLines: Array<{ type: 'removed' | 'placeholder' | 'unchanged', content?: string, lineNum?: number }> = [];
+    const rightLines: Array<{ type: 'added' | 'placeholder' | 'unchanged', content?: string, lineNum?: number }> = [];
+    let originalLineNum = 1;
+    let modifiedLineNum = 1;
+
+    diff.forEach(part => {
+      const lines = part.value.split('\n');
+      if (lines[lines.length - 1] === '' && !part.value.endsWith('\n\n')) {
+        lines.pop();
+      }
+      if (part.removed) {
+        lines.forEach(line => {
+          leftLines.push({ type: 'removed', content: line, lineNum: originalLineNum });
+          rightLines.push({ type: 'placeholder' });
+          originalLineNum++;
+        });
+      } else if (part.added) {
+        lines.forEach(line => {
+          leftLines.push({ type: 'placeholder' });
+          rightLines.push({ type: 'added', content: line, lineNum: modifiedLineNum });
+          modifiedLineNum++;
+        });
+      } else {
+        lines.forEach(line => {
+          leftLines.push({ type: 'unchanged', content: line, lineNum: originalLineNum });
+          rightLines.push({ type: 'unchanged', content: line, lineNum: modifiedLineNum });
+          originalLineNum++;
+          modifiedLineNum++;
+        });
+      }
+    });
+
+    setDiffResult({ leftLines, rightLines });
+    setIsComparing(false);
+  };
+
+  const copyToClipboard = async (text: string, type: string) => {
+    await navigator.clipboard.writeText(text);
+    setCopied({ ...copied, [type]: true });
+    setTimeout(() => setCopied({ ...copied, [type]: false }), 2000);
+  };
+
+  const clearCode = (type: string) => {
+    if (type === "original") {
+      setOriginalCode("");
+    } else {
+      setModifiedCode("");
+    }
+  };
+
+
+  return (
+    <div className={`min-h-screen transition-all duration-500 ${theme === "dark" ? "dark bg-gray-950" : "bg-gray-50"}`}>
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-emerald-500/20 to-blue-600/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+      </div>
+
+ 
+
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-blue-500/30 via-purple-500/20 to-transparent rounded-full blur-3xl opacity-60"></div>
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-tl from-emerald-500/30 via-blue-500/20 to-transparent rounded-full blur-3xl opacity-60"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear_gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:50px_50px] dark:bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear_gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)]"></div>
+
+        <div className="container mx-auto px-6 text-center relative z-10">
+          <div className="max-w-5xl mx-auto">
+            <div className="inline-flex items-center px-6 py-2 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 backdrop-blur-sm mb-8">
+              <Sparkles className="w-4 h-4 mr-2 text-blue-400" />
+              <span className="text-sm font-medium bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                AI-Powered Code Analysis
+              </span>
+            </div>
+
+            <h1 className="text-6xl md:text-8xl font-black mb-8 leading-tight">
+              <span className="bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent">
+                Compare
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-blue-600 bg-clip-text text-transparent animate-pulse">
+                JavaScript
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent">
+                Like a Pro
+              </span>
+            </h1>
+
+            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
+              Enterprise-grade diff engine with intelligent syntax highlighting,
+              semantic analysis, and instant visualization of code changes.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16">
+              <button
+                onClick={() => document.getElementById('tool')?.scrollIntoView({ behavior: 'smooth' })}
+                className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-semibold text-lg shadow-2xl hover:shadow-blue-500/25 transform hover:-translate-y-1 transition-all duration-300 flex items-center"
+              >
+                <Play className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" />
+                Start Comparing
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              </button>
+
+              <button className="px-8 py-4 bg-white/10 dark:bg-gray-800/50 backdrop-blur-sm border border-white/20 dark:border-gray-700/50 text-gray-900 dark:text-white rounded-2xl font-semibold text-lg hover:bg-white/20 dark:hover:bg-gray-700/50 transition-all duration-300 flex items-center">
+                <Github className="w-6 h-6 mr-3" />
+                View on GitHub
+              </button>
+            </div>
+
+            <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
+              <div className="text-center">
+                <div className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">50K+</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">Developers</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">1M+</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">Comparisons</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">99.9%</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">Uptime</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tool" className="py-24 relative">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+              Professional Code Comparison
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              Experience the most advanced JavaScript diff engine with intelligent syntax highlighting and semantic analysis.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8 mb-12">
+            <div className="group">
+              <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl rounded-3xl border border-white/20 dark:border-gray-800/50 shadow-2xl hover:shadow-emerald-500/10 transition-all duration-500 overflow-hidden">
+                <div className="flex items-center justify-between p-6 border-b border-gray-200/50 dark:border-gray-800/50">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse delay-100"></div>
+                    <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse delay-200"></div>
+                    <span className="ml-4 font-semibold text-gray-900 dark:text-white flex items-center">
+                      <FileText className="w-5 h-5 mr-2 text-emerald-500" />
+                      Original Code
+                    </span>
+                  </div>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => copyToClipboard(originalCode, "original")}
+                      className="p-2 rounded-xl text-gray-800 dark:text-gray-100 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      {copied.original ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                    </button>
+                    <button
+                      onClick={() => clearCode("original")}
+                      className="px-4 py-2 text-gray-800 dark:text-gray-100 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-sm font-medium"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <textarea
+                    value={originalCode}
+                    onChange={(e) => setOriginalCode(e.target.value)}
+                    placeholder="// Paste your original JavaScript code here..."
+                    className="w-full h-80 bg-transparent border-none outline-none resize-none font-mono text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400"
+                    spellCheck={false}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="group">
+              <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl rounded-3xl border border-white/20 dark:border-gray-800/50 shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 overflow-hidden">
+                <div className="flex items-center justify-between p-6 border-b border-gray-200/50 dark:border-gray-800/50">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse delay-100"></div>
+                    <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse delay-200"></div>
+                    <span className="ml-4 font-semibold text-gray-900 dark:text-white flex items-center">
+                      <FileText className="w-5 h-5 mr-2 text-blue-500" />
+                      Modified Code
+                    </span>
+                  </div>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => copyToClipboard(modifiedCode, "modified")}
+                      className="p-2 rounded-xl text-gray-800 dark:text-gray-100 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      {copied.modified ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                    </button>
+                    <button
+                      onClick={() => clearCode("modified")}
+                      className="px-4 py-2 rounded-xl text-gray-800 dark:text-gray-100 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-sm font-medium"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <textarea
+                    value={modifiedCode}
+                    onChange={(e) => setModifiedCode(e.target.value)}
+                    placeholder="// Paste your modified JavaScript code here..."
+                    className="w-full h-80 bg-transparent border-none outline-none resize-none font-mono text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400"
+                    spellCheck={false}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center mb-12">
+            <button
+              onClick={compareCodes}
+              disabled={isComparing}
+              className="group relative px-12 py-6 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 dark:from-blue-700 dark:via-purple-700 dark:to-blue-800 text-white rounded-2xl font-bold text-xl shadow-2xl hover:shadow-blue-500/25 dark:hover:shadow-blue-400/10 transform hover:-translate-y-1 transition-all duration-300 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed"
+            >
+              {isComparing ? (
+                <div className="flex items-center">
+                  <div className="w-6 h-6 border-2 border-white/30 dark:border-white/40 border-t-white rounded-full animate-spin mr-3"></div>
+                  <span className="text-white/90 dark:text-white/80">Analyzing Code...</span>
+                </div>
+              ) : (
+                <div className="flex items-center">
+                  <GitCompare className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform text-white/90 dark:text-white/80" />
+                  <span className="text-white/90 dark:text-white/80">Compare Code</span>
+                  <Sparkles className="w-5 h-5 ml-3 group-hover:rotate-12 transition-transform text-white/90 dark:text-white/80" />
+                </div>
+              )}
+            </button>
+          </div>
+
+          {diffResult && (
+            <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl rounded-3xl border border-white/20 dark:border-gray-800/50 shadow-2xl overflow-hidden">
+              <div className="flex items-center justify-between p-6 border-b border-gray-200/50 dark:border-gray-800/50">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
+                  <GitCompare className="w-6 h-6 mr-3 text-purple-500" />
+                  Code Comparison
+                </h3>
+                <div className="flex items-center space-x-6 text-sm">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                    <span className="text-gray-600 dark:text-gray-400">Changes</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-emerald-500 rounded-full mr-2"></div>
+                    <span className="text-gray-600 dark:text-gray-400">Additions</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 border-b border-gray-200/50 dark:border-gray-800/50">
+                <div className="p-4 bg-blue-50/30 dark:bg-blue-950/20 border-r border-gray-200/50 dark:border-gray-800/50">
+                  <div className="flex items-center text-blue-700 dark:text-blue-300 font-semibold">
+                    <FileText className="w-5 h-5 mr-3" />
+                    Original Code
+                  </div>
+                </div>
+                <div className="p-4 bg-emerald-50/30 dark:bg-emerald-950/20">
+                  <div className="flex items-center text-emerald-700 dark:text-emerald-300 font-semibold">
+                    <FileText className="w-5 h-5 mr-3" />
+                    Modified Code
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 font-mono text-sm max-h-96 overflow-auto">
+                <div className="border-r max-w-full border-gray-200/50 dark:border-gray-800/50 overflow-x-hidden">                  {diffResult.leftLines.map((line, index) => (
+                  <div
+                    key={`original-${index}`}
+                    className={`flex border-b border-gray-100/30 dark:border-gray-800/20 min-h-[1.75rem] ${line.type === 'removed'
+                      ? "bg-red-50/60 dark:bg-red-950/30"
+                      : line.type === 'placeholder'
+                        ? "bg-gray-100/30 dark:bg-gray-800/20"
+                        : "hover:bg-gray-50/50 dark:hover:bg-gray-800/30"
+                      } transition-colors`}
+                  >
+                    <div className="w-12 flex-shrink-0 px-2 py-1 text-gray-400 dark:text-gray-500 text-xs text-right border-r border-gray-200/30 dark:border-gray-700/30 bg-gray-50/50 dark:bg-gray-800/30 flex items-center justify-center">
+                      {line.type !== 'placeholder' ? line.lineNum : ''}
+                    </div>
+                    <div className="flex-1 px-3 py-1 flex items-center">
+                      {line.type !== 'placeholder' ? (
+                        <pre
+                          className={`w-full whitespace-pre-wrap break-words text-sm leading-relaxed ${line.type === 'removed'
+                            ? "text-red-700 dark:text-red-300"
+                            : "text-gray-800 dark:text-gray-200"
+                            }`}
+                        >
+                          {line.content}
+                        </pre>
+                      ) : (
+                        <div className="text-gray-400 italic text-xs py-1">
+                          (line not present)
+                        </div>
+                      )}
+                    </div>
+                    <div className="w-6 flex-shrink-0 flex items-center justify-center">
+                      {line.type === 'removed' && (
+                        <div className="w-2 h-2 rounded-full bg-red-400"></div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                </div>
+
+                <div className="overflow-x-hidden">                  {diffResult.rightLines.map((line, index) => (
+                  <div
+                    key={`modified-${index}`}
+                    className={`flex border-b border-gray-100/30 dark:border-gray-800/20 min-h-[1.75rem] ${line.type === 'added'
+                      ? "bg-emerald-50/60 dark:bg-emerald-950/30"
+                      : line.type === 'placeholder'
+                        ? "bg-gray-100/30 dark:bg-gray-800/20"
+                        : "hover:bg-gray-50/50 dark:hover:bg-gray-800/30"
+                      } transition-colors`}
+                  >
+                    <div className="w-12 flex-shrink-0 px-2 py-1 text-gray-400 dark:text-gray-500 text-xs text-right border-r border-gray-200/30 dark:border-gray-700/30 bg-gray-50/50 dark:bg-gray-800/30 flex items-center justify-center">
+                      {line.type !== 'placeholder' ? line.lineNum : ''}
+                    </div>
+                    <div className="flex-1 px-3 py-1 flex items-center">
+                      {line.type !== 'placeholder' ? (
+                        <pre
+                          className={`w-full whitespace-pre-wrap break-words text-sm leading-relaxed ${line.type === 'added'
+                            ? "text-emerald-700 dark:text-emerald-300"
+                            : "text-gray-800 dark:text-gray-200"
+                            }`}
+                        >
+                          {line.content}
+                        </pre>
+                      ) : (
+                        <div className="text-gray-400 italic text-xs py-1">
+                          (line not present)
+                        </div>
+                      )}
+                    </div>
+                    <div className="w-6 flex-shrink-0 flex items-center justify-center">
+                      {line.type === 'added' && (
+                        <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                </div>
+              </div>
+
+              <div className="p-4 bg-gray-50/50 dark:bg-gray-800/30 border-t border-gray-200/50 dark:border-gray-800/50">
+                <div className="flex items-center justify-center space-x-8 text-sm">
+                  <div className="flex items-center">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                    <span className="text-gray-600 dark:text-gray-400">
+                      {originalCode.split('\n').length} lines original
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
+                    <span className="text-gray-600 dark:text-gray-400">
+                      {modifiedCode.split('\n').length} lines modified
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>
+                    <span className="text-gray-600 dark:text-gray-400">
+                      {(() => {
+                        const originalLines = originalCode.split('\n');
+                        const modifiedLines = modifiedCode.split('\n');
+                        let changes = 0;
+                        const maxLines = Math.max(originalLines.length, modifiedLines.length);
+                        for (let i = 0; i < maxLines; i++) {
+                          if ((originalLines[i] || '') !== (modifiedLines[i] || '')) {
+                            changes++;
+                          }
+                        }
+                        return changes;
+                      })()} differences
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section id="features" className="py-24 relative">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+              Why Developers Choose Us
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              Built by developers, for developers. Every feature is designed to enhance your coding workflow.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="group p-8 bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl rounded-3xl border border-white/20 dark:border-gray-800/50 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Zap className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                Lightning Fast
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                Instant comparison with real-time highlighting powered by advanced algorithms. No waiting, no delays.
+              </p>
+            </div>
+
+            <div className="group p-8 bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl rounded-3xl border border-white/20 dark:border-gray-800/50 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Code2 className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                Smart Syntax
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                Intelligent JavaScript syntax highlighting with semantic understanding and context-aware coloring.
+              </p>
+            </div>
+
+            <div className="group p-8 bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl rounded-3xl border border-white/20 dark:border-gray-800/50 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Shield className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                Secure & Private
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                Your code never leaves your browser. Everything is processed locally with enterprise-grade security.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    
+    </div>
+  );
+};
+
+export default JSCodeCompare;
