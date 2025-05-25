@@ -2,6 +2,8 @@ import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import devtoolsJson from 'vite-plugin-devtools-json';
+import { vercelPreset } from "@vercel/remix/vite";
+import { installGlobals } from "@remix-run/node";
 
 declare module "@remix-run/node" {
   interface Future {
@@ -9,11 +11,13 @@ declare module "@remix-run/node" {
   }
 }
 
+installGlobals();
 export default defineConfig({
   plugins: [
     devtoolsJson(),
 
     remix({
+      presets: [vercelPreset()],
       future: {
         v3_fetcherPersist: true,
         v3_relativeSplatPath: true,
@@ -24,5 +28,5 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
-  
+
 });
